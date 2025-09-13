@@ -72,7 +72,7 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-black text-white dark">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-900 border-r border-gray-800">
+      <div className="w-64  border-r border-gray-800">
         <div className="p-6">
           <div className="flex items-center space-x-2 mb-6">
             <FolderKanban className="h-6 w-6 text-accent" />
@@ -86,7 +86,7 @@ export default function Dashboard() {
                 onClick={() => setSelectedProject(project.id)}
                 className={`w-full text-left p-3 rounded-lg transition-colors ${
                   selectedProject === project.id
-                    ? "bg-accent text-white"
+                    ? "bg-white text-black"
                     : "text-gray-300 hover:bg-gray-800 hover:text-white"
                 }`}
               >
@@ -217,7 +217,7 @@ export default function Dashboard() {
 
           {/* Stats Cards */}
           <div className="grid md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-gray-900 border-gray-800">
+            <Card className=" border-gray-800">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-400">Total Tasks</CardTitle>
               </CardHeader>
@@ -227,7 +227,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gray-900 border-gray-800">
+            <Card className=" border-gray-800">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-400">Completed</CardTitle>
               </CardHeader>
@@ -237,17 +237,17 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gray-900 border-gray-800">
+            <Card className=" border-gray-800">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-400">In Progress</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-accent">4</div>
+                <div className="text-2xl font-bold text-white">4</div>
                 <p className="text-xs text-gray-500">Active tasks</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-gray-900 border-gray-800">
+            <Card className=" border-gray-800">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-400">Overdue</CardTitle>
               </CardHeader>
@@ -259,7 +259,7 @@ export default function Dashboard() {
           </div>
 
           {/* Tasks Table */}
-          <Card className="bg-gray-900 border-gray-800">
+          <Card className=" border-gray-800">
             <CardHeader>
               <CardTitle>Tasks</CardTitle>
               <CardDescription className="text-gray-400">Manage and track your project tasks</CardDescription>
@@ -277,7 +277,7 @@ export default function Dashboard() {
                           task.status === "completed"
                             ? "bg-green-400"
                             : task.status === "in-progress"
-                              ? "bg-accent"
+                              ? "bg-white"
                               : "bg-gray-600"
                         }`}
                       />
@@ -290,9 +290,9 @@ export default function Dashboard() {
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
                           task.priority === "high"
-                            ? "bg-red-900 text-red-300"
+                            ? "bg-white text-black"
                             : task.priority === "medium"
-                              ? "bg-yellow-900 text-yellow-300"
+                              ? "bg-gray-600 text-white"
                               : "bg-gray-800 text-gray-400"
                         }`}
                       >

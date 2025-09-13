@@ -17,14 +17,14 @@
   --secondary-foreground: oklch(0 0 0); /* Black */
   --muted: oklch(0.96 0 0); /* Light gray */
   --muted-foreground: oklch(0.7 0 0); /* Medium gray */
-  --accent: oklch(0.6 0.2 25); /* Coral red */
+  --accent: oklch(0.6 0.2 240); /* Blue */
   --accent-foreground: oklch(1 0 0); /* White */
   --destructive: oklch(0.5 0.2 25); /* Red */
   --destructive-foreground: oklch(1 0 0); /* White */
   --border: oklch(0.7 0 0); /* Medium gray */
   --input: oklch(0.96 0 0); /* Light gray */
   --ring: oklch(0 0 0 / 0.2); /* Black with opacity */
-  --chart-1: oklch(0.6 0.2 25); /* Coral */
+  --chart-1: oklch(0.6 0.2 240); /* Blue */
   --chart-2: oklch(0.7 0 0); /* Medium gray */
   --chart-3: oklch(0 0 0); /* Black */
   --chart-4: oklch(1 0 0); /* White */
@@ -34,7 +34,7 @@
   --sidebar-foreground: oklch(0 0 0); /* Black */
   --sidebar-primary: oklch(1 0 0); /* White */
   --sidebar-primary-foreground: oklch(0 0 0); /* Black */
-  --sidebar-accent: oklch(0.6 0.2 25); /* Coral */
+  --sidebar-accent: oklch(0.6 0.2 240); /* Blue */
   --sidebar-accent-foreground: oklch(1 0 0); /* White */
   --sidebar-border: oklch(0.7 0 0); /* Medium gray */
   --sidebar-ring: oklch(0 0 0 / 0.1); /* Black with opacity */
@@ -54,14 +54,14 @@
   --secondary-foreground: oklch(1 0 0); /* White */
   --muted: oklch(0.1 0 0); /* Very dark gray */
   --muted-foreground: oklch(0.6 0 0); /* Medium gray */
-  --accent: oklch(0.6 0.2 25); /* Coral red */
+  --accent: oklch(0.6 0.2 240); /* Blue */
   --accent-foreground: oklch(1 0 0); /* White */
   --destructive: oklch(1 0 0); /* White instead of red */
   --destructive-foreground: oklch(0.05 0 0); /* Almost black */
   --border: oklch(0.2 0 0); /* Dark gray */
   --input: oklch(0.15 0 0); /* Lighter dark gray for better contrast */
   --ring: oklch(1 0 0 / 0.2); /* White with opacity */
-  --chart-1: oklch(0.6 0.2 25); /* Coral */
+  --chart-1: oklch(0.6 0.2 240); /* Blue */
   --chart-2: oklch(0.7 0 0); /* Light gray */
   --chart-3: oklch(1 0 0); /* White */
   --chart-4: oklch(0.3 0 0); /* Medium dark gray */

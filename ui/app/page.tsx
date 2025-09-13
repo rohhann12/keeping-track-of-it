@@ -31,6 +31,7 @@ export default function LandingPage() {
     // Simulate login process
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setLoginLoading(false)
+    setShowAuth(false)
     router.push("/dashboard")
   }
 
@@ -40,6 +41,7 @@ export default function LandingPage() {
     // Simulate signup process
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setSignupLoading(false)
+    setShowAuth(false)
     router.push("/dashboard")
   }
 

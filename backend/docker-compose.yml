@@ -71,10 +71,11 @@ services:
     environment:
       DATABASE_URL: "postgresql://postgres:password@postgres:5432/project_management?schema=public"
       REDIS_URL: "redis://redis:6379"
-      KAFKA_BROKERS: "kafka:9092"
+      KAFKA_BROKERS: "127.0.0.1:9092"
       JWT_SECRET: "your-super-secret-jwt-key-change-in-production"
       JWT_EXPIRES_IN: "7d"
-      NODE_ENV: "development"
+      NODE_ENV: "production"
+      PORT: "3001"
     depends_on:
       postgres:
         condition: service_healthy
@@ -82,9 +83,6 @@ services:
         condition: service_started
       kafka:
         condition: service_started
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     networks:
       - app-network
     command: npm run dev

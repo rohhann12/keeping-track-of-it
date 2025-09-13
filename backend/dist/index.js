@@ -16,7 +16,7 @@ const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 // Load environment variables
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 // Middleware
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());

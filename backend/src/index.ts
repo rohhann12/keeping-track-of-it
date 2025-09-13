@@ -21,7 +21,6 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Connect to Redis
 redisClient.connect().catch(console.error);

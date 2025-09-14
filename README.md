@@ -4,7 +4,7 @@ A fullstack multi-tenant project management application with role-based access c
 
 ## Features
 
-- **Backend**: Node.js + Express REST API
+- **Backend**: Node.js + Express REST API with TypeScript
 - **Database**: PostgreSQL with Prisma ORM
 - **Authentication**: JWT-based with role-based access control
 - **Caching**: Redis for improved performance
@@ -26,6 +26,8 @@ A fullstack multi-tenant project management application with role-based access c
 ### Frontend (Coming Soon)
 - React
 - TypeScript
+- Tailwind CSS
+- Radix UI Components
 - Role-based routing
 
 ## Quick Start
@@ -63,24 +65,38 @@ docker-compose exec backend npx prisma migrate dev
 
 ### Local Development
 
-1. Install dependencies:
+1. Install backend dependencies:
 ```bash
 cd backend
 npm install
 ```
 
-2. Start PostgreSQL, Redis, and Kafka (using Docker Compose):
+2. Install frontend dependencies:
 ```bash
+cd ../ui
+npm install
+```
+
+3. Start PostgreSQL, Redis, and Kafka (using Docker Compose):
+```bash
+cd ../backend
 docker-compose up -d
 ```
 
-3. Run database migrations:
+4. Run database migrations:
 ```bash
 npm run db:migrate
 ```
 
-4. Start the development server:
+5. Start the backend server:
 ```bash
+npm run dev
+```
+
+6. Start the frontend development server (in a new terminal):
+```bash
+cd ../ui
+install dependencies
 npm run dev
 ```
 
@@ -89,17 +105,25 @@ npm run dev
 ### Authentication
 - `POST /api/auth/signup` - Create a new user
 - `POST /api/auth/signin` - Sign in user
-- `GET /api/auth/me` - Get current user info
+- `POST /api/auth/create-admin` - Create admin user (requires authentication)
 
-### user Routes (Read-only access)
+### User Routes (Full CRUD access to own data)
 - `GET /api/user/projects` - Get user's projects (cached for 1 minute)
 - `GET /api/user/projects/:id` - Get specific project
+- `POST /api/user/projects` - Create new project
+- `PUT /api/user/projects/:id` - Update project
+- `DELETE /api/user/projects/:id` - Delete project
 - `GET /api/user/projects/:projectId/tasks` - Get project tasks
 - `GET /api/user/projects/:projectId/tasks/:taskId` - Get specific task
+- `POST /api/user/projects/:projectId/tasks` - Create new task
+- `PUT /api/user/projects/:projectId/tasks/:taskId` - Update task
+- `DELETE /api/user/projects/:projectId/tasks/:taskId` - Delete task
 
-### admin Routes (Full Read access)
+### Admin Routes (Read access to all data)
 - `GET /api/admin/projects` - Get all projects
-- `GET /api/admin/projects/:projectId/tasks` - Get project tasks
+- `GET /api/admin/projects/:id` - Get specific project
+- `GET /api/admin/:userId/projects` - Get user's projects
+- `GET /api/admin/:userId/projects/:projectId` - Get user's project with tasks
 
 ## Authentication
 
@@ -108,30 +132,27 @@ All protected routes require a JWT token in the Authorization header:
 Authorization: Bearer <your-jwt-token>
 ```
 
-### user Roles
-- **user**: Can only view their own projects and tasks
-- **admin**: Can perform CRUD operations on all projects and tasks
+### User Roles
+- **USER**: Can perform CRUD operations on their own projects and tasks
+- **ADMIN**: Can perform read operations on all projects and tasks across all users
 
 ## Caching
 
 - GET `/api/user/projects` is cached in Redis for 1 minute
 - Cache is automatically invalidated when projects are created, updated, or deleted
 - Cache keys are user-specific to ensure data isolation
+- Admin routes also use caching for improved performance
 
 
 
 ## Development
 
-### Available Scripts
--`cd into backend`
-- Build the backed folder and then run the backend
-- Run `node dist/index.js` - Start development server
-- `cd to ui`
-- Install dependencies
-- Run `npm run dev` to start the frontend locally
+
 
 
 ## Environment Variables
+
+### Backend Environment Variables
 
 Create a `.env` file in the backend directory:
 
@@ -170,8 +191,3 @@ Check if the API is running:
 curl http://localhost:3001/health
 ```
 
-## Next Steps
-
-1. Frontend React application
-2. API documentation
-3. Production deployment configuration

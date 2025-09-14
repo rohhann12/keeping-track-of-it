@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { apiClient } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,31 +19,65 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Loader2, FolderKanban, Users, BarChart3, Clock, Target, Shield, Zap, Star, Award } from "lucide-react"
+import { toast } from "sonner"
 
 export default function LandingPage() {
-  const [loginLoading, setLoginLoading] = useState(false)
-  const [signupLoading, setSignupLoading] = useState(false)
   const [showAuth, setShowAuth] = useState(false)
+  const [loginEmail, setLoginEmail] = useState("")
+  const [loginPassword, setLoginPassword] = useState("")
+  const [signupEmail, setSignupEmail] = useState("")
+  const [signupPassword, setSignupPassword] = useState("")
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  // Check if user is already authenticated
+  if (typeof window !== 'undefined' && localStorage.getItem('auth_token')) {
+    router.push("/dashboard")
+    return null
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoginLoading(true)
-    // Simulate login process
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setLoginLoading(false)
-    setShowAuth(false)
-    router.push("/dashboard")
+    try {
+      setLoading(true)
+      const response = await apiClient.signin(loginEmail, loginPassword)
+      
+      // Store token in localStorage
+      localStorage.setItem('auth_token', response.token)
+      console.log(response.token)
+      router.push("/dashboard")
+      toast.success('Successfully signed in!')
+      setShowAuth(false)
+      setLoginEmail("")
+      setLoginPassword("")
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sign in'
+      toast.error(errorMessage)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSignupLoading(true)
-    // Simulate signup process
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setSignupLoading(false)
-    setShowAuth(false)
-    router.push("/dashboard")
+    try {
+      setLoading(true)
+      const response = await apiClient.signup(signupEmail, signupPassword)
+      
+      // Store token in localStorage
+      localStorage.setItem('auth_token', response.token)
+      
+      toast.success('Account created successfully!')
+      setShowAuth(false)
+      setSignupEmail("")
+      setSignupPassword("")
+      router.push("/dashboard")
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create account'
+      toast.error(errorMessage)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const navigateToDashboard = () => {
@@ -82,6 +117,8 @@ export default function LandingPage() {
                           type="email"
                           placeholder="Enter your email"
                           required
+                          value={loginEmail}
+                          onChange={(e) => setLoginEmail(e.target.value)}
                           className="text-white placeholder:text-gray-400"
                         />
                       </div>
@@ -92,12 +129,14 @@ export default function LandingPage() {
                           type="password"
                           placeholder="Enter your password"
                           required
+                          value={loginPassword}
+                          onChange={(e) => setLoginPassword(e.target.value)}
                           className="text-white placeholder:text-gray-400"
                         />
                       </div>
                       <DialogFooter>
-                        <Button type="submit" className="w-full" disabled={loginLoading}>
-                          {loginLoading ? (
+                        <Button type="submit" className="w-full" disabled={loading}>
+                          {loading ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                               Signing In...
@@ -117,22 +156,14 @@ export default function LandingPage() {
                     </DialogHeader>
                     <form onSubmit={handleSignup} className="space-y-4 mt-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name">Full Name</Label>
-                        <Input
-                          id="name"
-                          type="text"
-                          placeholder="Enter your full name"
-                          required
-                          className="text-white placeholder:text-gray-400"
-                        />
-                      </div>
-                      <div className="space-y-2">
                         <Label htmlFor="signup-email">Email</Label>
                         <Input
                           id="signup-email"
                           type="email"
                           placeholder="Enter your email"
                           required
+                          value={signupEmail}
+                          onChange={(e) => setSignupEmail(e.target.value)}
                           className="text-white placeholder:text-gray-400"
                         />
                       </div>
@@ -143,12 +174,14 @@ export default function LandingPage() {
                           type="password"
                           placeholder="Create a password"
                           required
+                          value={signupPassword}
+                          onChange={(e) => setSignupPassword(e.target.value)}
                           className="text-white placeholder:text-gray-400"
                         />
                       </div>
                       <DialogFooter>
-                        <Button type="submit" className="w-full" disabled={signupLoading}>
-                          {signupLoading ? (
+                        <Button type="submit" className="w-full" disabled={loading}>
+                          {loading ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                               Creating Account...

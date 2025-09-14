@@ -70,7 +70,7 @@ services:
       - "3001:3001"
     environment:
       DATABASE_URL: "postgresql://postgres:password@postgres:5432/project_management?schema=public"
-      REDIS_URL: "redis://redis:6379"
+      REDIS_URL: "redis://127.0.0.1:6379"
       KAFKA_BROKERS: "127.0.0.1:9092"
       JWT_SECRET: "your-super-secret-jwt-key-change-in-production"
       JWT_EXPIRES_IN: "7d"

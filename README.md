@@ -71,7 +71,7 @@ npm install
 
 2. Start PostgreSQL, Redis, and Kafka (using Docker Compose):
 ```bash
-docker-compose up postgres redis kafka -d
+docker-compose up -d
 ```
 
 3. Run database migrations:
@@ -97,15 +97,9 @@ npm run dev
 - `GET /api/user/projects/:projectId/tasks` - Get project tasks
 - `GET /api/user/projects/:projectId/tasks/:taskId` - Get specific task
 
-### admin Routes (Full CRUD access)
+### admin Routes (Full Read access)
 - `GET /api/admin/projects` - Get all projects
-- `POST /api/admin/projects` - Create new project
-- `PUT /api/admin/projects/:id` - Update project
-- `DELETE /api/admin/projects/:id` - Delete project
 - `GET /api/admin/projects/:projectId/tasks` - Get project tasks
-- `POST /api/admin/projects/:projectId/tasks` - Create new task
-- `PUT /api/admin/projects/:projectId/tasks/:taskId` - Update task
-- `DELETE /api/admin/projects/:projectId/tasks/:taskId` - Delete task
 
 ## Authentication
 
@@ -124,59 +118,18 @@ Authorization: Bearer <your-jwt-token>
 - Cache is automatically invalidated when projects are created, updated, or deleted
 - Cache keys are user-specific to ensure data isolation
 
-## Event Streaming
 
-Kafka events are published for:
-- Project created/updated/deleted
-- Task created/updated/deleted
-
-Events are published to topics:
-- `project.created`
-- `project.updated`
-- `project.deleted`
-- `task.created`
-- `task.updated`
-- `task.deleted`
-
-## Database Schema
-
-### users
-- id (String, Primary Key)
-- email (String, Unique)
-- password (String, Hashed)
-- role (userRole: admin | user)
-- createdAt, updatedAt (DateTime)
-
-### Projects
-- id (String, Primary Key)
-- title (String)
-- description (String, Optional)
-- userId (String, Foreign Key)
-- createdAt, updatedAt (DateTime)
-
-### Tasks
-- id (String, Primary Key)
-- title (String)
-- description (String, Optional)
-- completed (Boolean, Default: false)
-- projectId (String, Foreign Key)
-- createdAt, updatedAt (DateTime)
 
 ## Development
 
 ### Available Scripts
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:push` - Push schema to database
-- `npm run db:migrate` - Run database migrations
-- `npm run db:studio` - Open Prisma Studio
+-`cd into backend`
+- Build the backed folder and then run the backend
+- Run `node dist/index.js` - Start development server
+- `cd to ui`
+- Install dependencies
+- Run `npm run dev` to start the frontend locally
 
-### Testing
-```bash
-npm test
-```
 
 ## Environment Variables
 
@@ -220,6 +173,5 @@ curl http://localhost:3001/health
 ## Next Steps
 
 1. Frontend React application
-2. Unit tests
-3. API documentation
-4. Production deployment configuration
+2. API documentation
+3. Production deployment configuration

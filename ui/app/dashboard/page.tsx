@@ -24,10 +24,10 @@ import { toast } from "sonner"
 
 export default function Dashboard() {
   const router = useRouter()
-  const { projects, loading: projectsLoading, createProject, updateProject, deleteProject } = useProjects()
+  const { projects, loading: projectsLoading, error: projectsError, createProject, updateProject, deleteProject } = useProjects()
   
   const [selectedProject, setSelectedProject] = useState<string | null>(null)
-  const { tasks, loading: tasksLoading, createTask, updateTask, deleteTask } = useTasks(selectedProject)
+  const { tasks, loading: tasksLoading, error: tasksError, createTask, updateTask, deleteTask } = useTasks(selectedProject)
   
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({})
   const [showNewProject, setShowNewProject] = useState(false)
@@ -57,9 +57,16 @@ export default function Dashboard() {
       const token = localStorage.getItem('auth_token')
       if (!token) {
         router.push("/")
+        return
+      }
+      
+      // Fetch projects on mount if authenticated
+      if (projects.length === 0 && !projectsLoading) {
+        // This will be handled by the useProjects hook automatically
+        console.log('Fetching projects on mount...')
       }
     }
-  }, [router])
+  }, [router, projects.length])
 
   // Show loading while checking auth
   if (typeof window === 'undefined') {
@@ -220,6 +227,17 @@ export default function Dashboard() {
           {projectsLoading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="h-6 w-6 animate-spin" />
+            </div>
+          ) : projectsError ? (
+            <div className="text-center py-8 text-red-400">
+              <p>Error loading projects: {projectsError}</p>
+              <Button 
+                onClick={() => window.location.reload()} 
+                className="mt-2"
+                variant="outline"
+              >
+                Retry
+              </Button>
             </div>
           ) : (
             <div className="space-y-2">
@@ -503,6 +521,17 @@ export default function Dashboard() {
                   {tasksLoading ? (
                     <div className="flex items-center justify-center py-8">
                       <Loader2 className="h-6 w-6 animate-spin" />
+                    </div>
+                  ) : tasksError ? (
+                    <div className="text-center py-8 text-red-400">
+                      <p>Error loading tasks: {tasksError}</p>
+                      <Button 
+                        onClick={() => window.location.reload()} 
+                        className="mt-2"
+                        variant="outline"
+                      >
+                        Retry
+                      </Button>
                     </div>
                   ) : tasks.length === 0 ? (
                     <div className="text-center py-8 text-gray-400">

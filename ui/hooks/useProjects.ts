@@ -13,10 +13,13 @@ export function useProjects() {
     try {
       setLoading(true);
       setError(null);
+      console.log('Fetching projects from API...');
       const response = await apiClient.getProjects();
+      console.log('Projects fetched successfully:', response);
       setProjects(response.projects);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch projects';
+      console.error('Error fetching projects:', err);
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -95,10 +98,13 @@ export function useTasks(projectId: string | null) {
     try {
       setLoading(true);
       setError(null);
+      console.log(`Fetching tasks for project ${projectId}...`);
       const response = await apiClient.getProjectTasks(projectId);
+      console.log('Tasks fetched successfully:', response);
       setTasks(response.tasks);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch tasks';
+      console.error('Error fetching tasks:', err);
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {

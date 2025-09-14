@@ -187,6 +187,27 @@ class ApiClient {
     const response: AxiosResponse<{ message: string }> = await this.axiosInstance.delete(`/api/user/projects/${projectId}/tasks/${taskId}`);
     return response.data;
   }
+
+  // Admin endpoints
+  async getAllProjects(): Promise<ProjectsResponse> {
+    const response: AxiosResponse<ProjectsResponse> = await this.axiosInstance.get('/api/admin/projects');
+    return response.data;
+  }
+
+  async getUserProjects(userId: string): Promise<ProjectsResponse> {
+    const response: AxiosResponse<ProjectsResponse> = await this.axiosInstance.get(`/api/admin/${userId}/projects`);
+    return response.data;
+  }
+
+  async getUserProjectTasks(userId: string, projectId: string): Promise<{ user: User; project: Project; tasks: Task[]; count: number }> {
+    const response: AxiosResponse<{ user: User; project: Project; tasks: Task[]; count: number }> = await this.axiosInstance.get(`/api/admin/${userId}/projects/${projectId}`);
+    return response.data;
+  }
+
+  async getProjectByIdAdmin(id: string): Promise<{ project: Project }> {
+    const response: AxiosResponse<{ project: Project }> = await this.axiosInstance.get(`/api/admin/projects/${id}`);
+    return response.data;
+  }
 }
 
 export const apiClient = new ApiClient(API_BASE_URL);

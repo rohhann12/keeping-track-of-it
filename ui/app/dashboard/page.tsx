@@ -51,7 +51,7 @@ export default function Dashboard() {
     }
   }, [projects, selectedProject])
 
-  // Check authentication on mount
+  // Check authentication and role on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('auth_token')
@@ -296,7 +296,7 @@ export default function Dashboard() {
                     required
                     value={projectTitle}
                     onChange={(e) => setProjectTitle(e.target.value)}
-                    className="text-white placeholder:text-gray-400"
+                    className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -306,7 +306,7 @@ export default function Dashboard() {
                     placeholder="Enter project description"
                     value={projectDescription}
                     onChange={(e) => setProjectDescription(e.target.value)}
-                    className="text-white placeholder:text-gray-400"
+                    className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                   />
                 </div>
                 <DialogFooter>
@@ -344,7 +344,7 @@ export default function Dashboard() {
                     required
                     value={projectTitle}
                     onChange={(e) => setProjectTitle(e.target.value)}
-                    className="text-white placeholder:text-gray-400"
+                    className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -354,7 +354,7 @@ export default function Dashboard() {
                     placeholder="Enter project description"
                     value={projectDescription}
                     onChange={(e) => setProjectDescription(e.target.value)}
-                    className="text-white placeholder:text-gray-400"
+                    className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                   />
                 </div>
                 <DialogFooter>
@@ -417,7 +417,7 @@ export default function Dashboard() {
                           required
                           value={taskTitle}
                           onChange={(e) => setTaskTitle(e.target.value)}
-                          className="text-white placeholder:text-gray-400"
+                          className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -427,7 +427,7 @@ export default function Dashboard() {
                           placeholder="Enter task description"
                           value={taskDescription}
                           onChange={(e) => setTaskDescription(e.target.value)}
-                          className="text-white placeholder:text-gray-400"
+                          className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                         />
                       </div>
                       <DialogFooter>
@@ -487,16 +487,6 @@ export default function Dashboard() {
                   <CardContent>
                     <div className="text-2xl font-bold text-white">{inProgressTasks.length}</div>
                     <p className="text-xs text-gray-500">Active tasks</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-gray-800">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-400">Projects</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-white">{projects.length}</div>
-                    <p className="text-xs text-gray-500">Total projects</p>
                   </CardContent>
                 </Card>
               </div>
@@ -614,7 +604,7 @@ export default function Dashboard() {
                     required
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
-                    className="text-white placeholder:text-gray-400"
+                    className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -624,7 +614,7 @@ export default function Dashboard() {
                     placeholder="Enter task description"
                     value={taskDescription}
                     onChange={(e) => setTaskDescription(e.target.value)}
-                    className="text-white placeholder:text-gray-400"
+                    className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                   />
                 </div>
                 <DialogFooter>

@@ -4,6 +4,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { apiClient } from "@/lib/api"
+import { getRoleFromToken } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -28,12 +29,24 @@ export default function LandingPage() {
   const [signupEmail, setSignupEmail] = useState("")
   const [signupPassword, setSignupPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter()
 
-  // Check if user is already authenticated
+  // Check if user is already authenticated and redirect based on role
   if (typeof window !== 'undefined' && localStorage.getItem('auth_token')) {
-    router.push("/dashboard")
-    return null
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      const role = getRoleFromToken(token)
+      if (role === 'ADMIN') {
+        router.push("/admin")
+      } else if (role === 'USER') {
+        router.push("/dashboard")
+      } else {
+        // If token is invalid, remove it and stay on landing page
+        localStorage.removeItem('auth_token')
+      }
+      return null
+    }
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -45,7 +58,18 @@ export default function LandingPage() {
       // Store token in localStorage
       localStorage.setItem('auth_token', response.token)
       console.log(response.token)
-      router.push("/dashboard")
+      
+      // Decode JWT token to get role
+      const role = getRoleFromToken(response.token)
+      if (role === 'ADMIN') {
+        router.push("/admin")
+      } else if (role === 'USER') {
+        router.push("/dashboard")
+      } else {
+        toast.error('Invalid token received')
+        return
+      }
+      
       toast.success('Successfully signed in!')
       setShowAuth(false)
       setLoginEmail("")
@@ -62,16 +86,26 @@ export default function LandingPage() {
     e.preventDefault()
     try {
       setLoading(true)
-      const response = await apiClient.signup(signupEmail, signupPassword)
+      const response = await apiClient.signup(signupEmail, signupPassword, isAdmin ? 'ADMIN' : 'USER')
       
       // Store token in localStorage
       localStorage.setItem('auth_token', response.token)
+      
+      // Decode JWT token to get role
+      const role = getRoleFromToken(response.token)
+      if (role === 'ADMIN') {
+        router.push("/admin")
+      } else if (role === 'USER') {
+        router.push("/dashboard")
+      } else {
+        toast.error('Invalid token received')
+        return
+      }
       
       toast.success('Account created successfully!')
       setShowAuth(false)
       setSignupEmail("")
       setSignupPassword("")
-      router.push("/dashboard")
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create account'
       toast.error(errorMessage)
@@ -95,7 +129,7 @@ export default function LandingPage() {
           <div className="flex items-center space-x-4">
             <Dialog open={showAuth} onOpenChange={setShowAuth}>
               <DialogTrigger asChild>
-                <Button variant="outline">Sign In</Button>
+                <Button variant="outline" className=" cursor-pointer hover:opacity-50">Sign In</Button>
               </DialogTrigger>
               <DialogContent className="bg-black border-gray-800">
                 <Tabs defaultValue="login" className="w-full">
@@ -109,8 +143,8 @@ export default function LandingPage() {
                       <DialogTitle>Welcome Back</DialogTitle>
                       <DialogDescription>Enter your credentials to access your dashboard</DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleLogin} className="space-y-4 mt-4">
-                      <div className="space-y-2">
+                    <form onSubmit={handleLogin} className="space-y-2 mt-4">
+                      <div className="">
                         <Label htmlFor="email">Email</Label>
                         <Input
                           id="email"
@@ -119,10 +153,10 @@ export default function LandingPage() {
                           required
                           value={loginEmail}
                           onChange={(e) => setLoginEmail(e.target.value)}
-                          className="text-white placeholder:text-gray-400"
+                          className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                         />
                       </div>
-                      <div className="space-y-2">
+                      <div className="">
                         <Label htmlFor="password">Password</Label>
                         <Input
                           id="password"
@@ -131,11 +165,11 @@ export default function LandingPage() {
                           required
                           value={loginPassword}
                           onChange={(e) => setLoginPassword(e.target.value)}
-                          className="text-white placeholder:text-gray-400"
+                          className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                         />
                       </div>
                       <DialogFooter>
-                        <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="mt-2 w-full font-black bg-white text-black hover:bg-gray-100 hover:opacity-50" disabled={loading}>
                           {loading ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -155,7 +189,7 @@ export default function LandingPage() {
                       <DialogDescription>Get started with your new project management account</DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleSignup} className="space-y-4 mt-4">
-                      <div className="space-y-2">
+                      <div className="">
                         <Label htmlFor="signup-email">Email</Label>
                         <Input
                           id="signup-email"
@@ -164,10 +198,10 @@ export default function LandingPage() {
                           required
                           value={signupEmail}
                           onChange={(e) => setSignupEmail(e.target.value)}
-                          className="text-white placeholder:text-gray-400"
+                          className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                         />
                       </div>
-                      <div className="space-y-2">
+                      <div className="">
                         <Label htmlFor="signup-password">Password</Label>
                         <Input
                           id="signup-password"
@@ -176,11 +210,12 @@ export default function LandingPage() {
                           required
                           value={signupPassword}
                           onChange={(e) => setSignupPassword(e.target.value)}
-                          className="text-white placeholder:text-gray-400"
+                          className="bg-white text-black placeholder:text-gray-500 border-gray-300 focus:border-gray-500"
                         />
                       </div>
+                  
                       <DialogFooter>
-                        <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="mt-2 w-full bg-white text-black hover:bg-gray-100 hover:text-black hover:opacity-50" disabled={loading}>
                           {loading ? (
                             <>
                               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -85,9 +85,8 @@ export class CommonController {
       }, context);
 
       // Invalidate cache
-      await invalidateCache('projects:*');
-      await invalidateCache('admin:projects:*');
-
+      await invalidateCache('projects');
+      await invalidateCache('admin:projects');
       res.status(201).json({
         message: 'Project created successfully',
         project
@@ -112,8 +111,8 @@ export class CommonController {
       const updatedProject = await this.commonService.updateProject(id!, { title, description }, context, targetUserId ?? undefined);
 
       // Invalidate cache
-      await invalidateCache('projects:*');
-      await invalidateCache('admin:projects:*');
+      await invalidateCache('projects');
+      await invalidateCache('admin:projects');
 
       res.json({
         message: 'Project updated successfully',
@@ -138,8 +137,8 @@ export class CommonController {
       await this.commonService.deleteProject(id!, context, targetUserId ?? undefined);
 
       // Invalidate cache
-      await invalidateCache('projects:*');
-      await invalidateCache('admin:projects:*');
+      await invalidateCache('projects');
+      await invalidateCache('admin:projects');
 
       res.json({
         message: 'Project deleted successfully'
@@ -218,8 +217,8 @@ export class CommonController {
       }, context, targetUserId ?? undefined);
 
       // Invalidate cache
-      await invalidateCache('projects:*');
-      await invalidateCache('admin:projects:*');
+      await invalidateCache('projects');
+      await invalidateCache('admin:projects');
 
       res.status(201).json({
         message: 'Task created successfully',
@@ -249,8 +248,8 @@ export class CommonController {
       }, context, targetUserId ?? undefined);
 
       // Invalidate cache
-      await invalidateCache('projects:*');
-      await invalidateCache('admin:projects:*');
+      await invalidateCache('projects');
+      await invalidateCache('admin:projects');
 
       res.json({
         message: 'Task updated successfully',
@@ -275,8 +274,8 @@ export class CommonController {
       await this.commonService.deleteTask(projectId!, taskId!, context, targetUserId ?? undefined);
 
       // Invalidate cache
-      await invalidateCache('projects:*');
-      await invalidateCache('admin:projects:*');
+      await invalidateCache('projects');
+      await invalidateCache('admin:projects');
 
       res.json({
         message: 'Task deleted successfully'

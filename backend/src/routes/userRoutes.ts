@@ -10,6 +10,10 @@ const commonController = new CommonController();
 router.use(authenticate);
 router.use(requireUser);
 
+// TO-DO
+// caching only the all project, for /:id things we have to parse it and then filter out and return that
+
+
 // Get all projects for the authenticated user
 router.get('/projects', cacheMiddleware('projects', 60), (req, res) => commonController.getUserProjects(req, res));
 

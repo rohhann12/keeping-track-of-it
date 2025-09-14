@@ -3,7 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import redisClient from './lib/redis';
+import getRedisClient from './lib/redis';
 
 // Import routes
 import authRoutes from './routes/auth';
@@ -14,7 +14,7 @@ import adminRoutes from './routes/adminRoutes';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(helmet());
@@ -22,8 +22,7 @@ app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
 
-// Connect to Redis
-redisClient.connect().catch(console.error);
+// Redis will be initialized on first request
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -52,11 +51,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
-  console.log(`👤 user endpoints: http://localhost:${PORT}/api/user`);
-  console.log(`👑 admin endpoints: http://localhost:${PORT}/api/admin`);
+  console.log(` Server running on port ${PORT}`);
 });
 
 export default app;
